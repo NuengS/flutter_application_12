@@ -15,22 +15,26 @@ class ShowData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey[700],
-        title: Text("Input Project"),
+        backgroundColor: Colors.green,
+        title: Center(
+          child: Text(
+            "HomeWork",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
       body: Container(
-        color: Colors.blueGrey[200],
+        color: Colors.white,
         alignment: Alignment.center,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Hello!",
+              "Your Data!",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
             Text(
-              "$fname $lname $address $pastal $phone $recievedate ",
+              "Your Name : $fname $lname \nYour address : $address \nYour pastal : $pastal \nYour phone : $phone \n $recievedate ",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),

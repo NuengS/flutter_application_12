@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_12/showdata.dart';
+import 'package:flutter/services.dart';
+import 'showdata.dart';
 
 class InputForm extends StatefulWidget {
   @override
@@ -11,21 +10,6 @@ class InputForm extends StatefulWidget {
 class _InputFormState extends State<InputForm> {
   String errmsg = '';
   final _formkey = GlobalKey<FormState>();
-  void input() {
-    FocusScope.of(context).unfocus();
-    errmsg = '';
-    saveData();
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ShowData(
-                _firstNameController.text,
-                _lastNameController.text,
-                _addressController.text,
-                _postalController.text,
-                _phoneController.text,
-                _recieveDateController.text)));
-  }
 
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
@@ -34,19 +18,37 @@ class _InputFormState extends State<InputForm> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _recieveDateController = TextEditingController();
 
-  void saveData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("fname", _firstNameController.text);
-    prefs.setString("laname", _lastNameController.text);
-    prefs.setString("address", _addressController.text);
-    prefs.setString("postal", _postalController.text);
-    prefs.setString("phone", _phoneController.text);
-    prefs.setString("recievedate", _recieveDateController.text);
+  void input() {
+    FocusScope.of(context).unfocus();
+    bool passValidate = _formkey.currentState.validate();
+    errmsg = '';
+    if (passValidate) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ShowData(
+              _firstNameController.text,
+              _lastNameController.text,
+              _addressController.text,
+              _postalController.text,
+              _phoneController.text,
+              _recieveDateController.text),
+        ),
+      );
+    }
   }
 
   TextFormField getFirstName() {
     return TextFormField(
       controller: _firstNameController,
+      validator: (String inputFname) {
+        if (inputFname.isEmpty) {
+          return "Please input First Name";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         labelText: "FistName",
         hintText: "Enter your FistName",
@@ -58,6 +60,14 @@ class _InputFormState extends State<InputForm> {
   TextFormField getLastName() {
     return TextFormField(
       controller: _lastNameController,
+      validator: (String inputLname) {
+        if (inputLname.isEmpty) {
+          return "Please input Last Name";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         labelText: "LastName",
         hintText: "Enter your LastName",
@@ -69,6 +79,14 @@ class _InputFormState extends State<InputForm> {
   TextFormField getAddress() {
     return TextFormField(
       controller: _addressController,
+      validator: (String inputAddress) {
+        if (inputAddress.isEmpty) {
+          return "Please input Address";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         labelText: "Address",
         hintText: "Enter your Address",
@@ -80,6 +98,19 @@ class _InputFormState extends State<InputForm> {
   TextFormField getPostal() {
     return TextFormField(
       controller: _postalController,
+      maxLength: 5,
+      inputFormatters: [
+        // ignore: deprecated_member_use
+        WhitelistingTextInputFormatter(RegExp("[0-9]"))
+      ],
+      validator: (String inputPostal) {
+        if (inputPostal.isEmpty) {
+          return "Please input Postal";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         labelText: "Postal",
         hintText: "Enter your Postal",
@@ -91,6 +122,19 @@ class _InputFormState extends State<InputForm> {
   TextFormField getPhone() {
     return TextFormField(
       controller: _phoneController,
+      maxLength: 10,
+      inputFormatters: [
+        // ignore: deprecated_member_use
+        WhitelistingTextInputFormatter(RegExp("[0-9]"))
+      ],
+      validator: (String inputPhone) {
+        if (inputPhone.isEmpty) {
+          return "Please input Phone";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         labelText: "Phone",
         hintText: "Enter your Phone",
@@ -102,9 +146,17 @@ class _InputFormState extends State<InputForm> {
   TextFormField getRecieveDate() {
     return TextFormField(
       controller: _recieveDateController,
+      validator: (String inputRecieveDate) {
+        if (inputRecieveDate.isEmpty) {
+          return "Please input RecieveDate";
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.name,
       decoration: InputDecoration(
         labelText: "RecieveDate",
-        hintText: "Enter your RecieveDate",
+        hintText: "วว/ดด/ปปปป",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -115,20 +167,21 @@ class _InputFormState extends State<InputForm> {
       width: double.infinity,
       height: 50,
       child: RaisedButton(
-        color: Colors.grey,
+        color: Colors.green,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
           side: BorderSide(color: Colors.white),
         ),
-        onPressed: input,
         child: Text(
           "Confirm",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 23,
+            color: Colors.white,
           ),
         ),
+        onPressed: input,
       ),
     );
   }

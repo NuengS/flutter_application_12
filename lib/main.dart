@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'loading.dart';
+import 'package:flutter_application_12/welcome.dart';
 
 void main() {
   runApp(InputDate());
@@ -15,7 +15,7 @@ class InputDate extends StatelessWidget {
     );
     return MaterialApp(
       title: 'Input demo',
-      home: Loading(),
+      home: Welcome(),
     );
   }
 }
